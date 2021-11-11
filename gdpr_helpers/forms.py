@@ -10,10 +10,3 @@ class GDPRFormMixin(object):
                 self.fields[reason["field_name"]] = reason["field"]
         except LegalReasonGroup.DoesNotExist:
             pass
-
-    def save(self, *args, **kwargs):
-        saved_object = super().save(*args, **kwargs)
-        PrivacyLog.objects.create_log(
-            content_object=saved_object, cleaned_data=self.cleaned_data
-        )
-        return saved_object
