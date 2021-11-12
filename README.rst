@@ -1,14 +1,14 @@
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
     :alt: Black
-======
+
 GDPR Helpers
-======
+============
 
 GDPR Helpers is a Django app for easy GDPR compliance.
 
 Quickstart
--------
+----------
 
 Install Django GDPR Helpers:
    pip install -e git+git@github.com:Arussil/django-gdpr-helpers.git
@@ -16,6 +16,7 @@ Install Django GDPR Helpers:
 Add it to your `INSTALLED_APPS`:
 
 .. code-block:: python
+
    INSTALLED_APPS = (
       ...
       'gdpr_helpers',
@@ -26,7 +27,7 @@ Define your reasons for asking personal data and assign them to a group:
 
 .. code-block:: python
 
-   from gdpr_helpers.models import LegalReasonGroup, LegalReason
+   from gdpr_helpers.models import LegalReasonGroup, egalReason
 
    legal_group = LegalReasonGroup.objects.create(where="registration")
 
