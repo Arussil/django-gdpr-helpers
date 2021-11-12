@@ -11,7 +11,7 @@ Quickstart
 ----------
 
 Install Django GDPR Helpers:
-   pip install -e git+git@github.com:Arussil/django-gdpr-helpers.git
+   pip install django-gdpr-helpers
 
 Add it to your `INSTALLED_APPS`:
 
