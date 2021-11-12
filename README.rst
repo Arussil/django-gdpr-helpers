@@ -35,7 +35,7 @@ Define your reasons for asking personal data and assign them to a group:
 
 Or use the django-admin.
 
-Add the Mixin to a form that create an object and need privacy flags:
+Add the Mixin to a form that create an object and need privacy flags, remember to save the PrivacyLog in someplace:
 
 .. code-block:: python
 
@@ -46,9 +46,14 @@ Add the Mixin to a form that create an object and need privacy flags:
 
    class RegistrationForm(GDPRFormMixin):
       class Meta:
-         model = User
-         where = "registration"
-         fields = ("whatever_fields_from_model",)
+        model = User
+        where = "registration"
+        fields = ("whatever_fields_from_model",)
+
+      def save(self):
+        user = super().save()
+        PrivacyLog.objects.create_log(content_object=user, cleaned_data=self.cleaned_data)
+        return user
 
 Note that the privacy fields are already injected in the form.
 
