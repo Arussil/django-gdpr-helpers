@@ -22,6 +22,8 @@ DATABASES = {
     }
 }
 
+USE_TZ = True
+
 TIME_ZONE = "Europe/London"
 
 LANGUAGE_CODE = "en-us"
@@ -72,9 +74,10 @@ MIDDLEWARE = (
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "gdpr_helpers.middleware.ConsentExpiredMiddleware",
 )
 
-ROOT_URLCONF = "urls"
+ROOT_URLCONF = "tests.urls"
 
 INSTALLED_APPS = (
     "django.contrib.auth",
