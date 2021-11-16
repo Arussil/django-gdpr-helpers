@@ -1,10 +1,12 @@
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.utils.timezone import datetime, now, timedelta
 from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 
 from .managers import LegalReasonGroupManager, LegalReasonManager, PrivacyLogManager
+from .utils import aware_timedelta_days
 
 
 class PrivacyLog(models.Model):
@@ -16,6 +18,14 @@ class PrivacyLog(models.Model):
     created = models.DateTimeField(_("Data creazione"), auto_now_add=True)
 
     objects = PrivacyLogManager()
+
+    @property
+    def is_expired(self) -> bool:
+        legal_reasons = [event.legal_reason for event in self.event.all()]
+        for legal_reason in legal_reasons:
+            if legal_reason.check_expiration(self.created):
+                return True
+        return False
 
     def __str__(self):
         return f"{self.content_type} privacy-log {self.created}"
@@ -32,6 +42,8 @@ class LegalReasonGroup(models.Model):
     """
 
     where = models.CharField(_("Posizione del gruppo"), max_length=100, unique=True)
+    is_active = models.BooleanField(_("Attivo"), default=True)
+    is_renewable = models.BooleanField(_("Rinnovabile"), default=False)
 
     objects = LegalReasonGroupManager()
 
@@ -51,6 +63,7 @@ class LegalReasonGroup(models.Model):
 
 class LegalReason(models.Model):
     """Register the legal reason, it will be used for flags and privacy-policy page"""
+
     slug = models.SlugField(_("Slug del consenso"), unique=True)
     flag_text = models.TextField(_("Testo da mostrare nella spunta"))
     privacy_description = models.TextField(
@@ -66,12 +79,20 @@ class LegalReason(models.Model):
         blank=True,
         related_name="legal_reasons",
     )
+    duration = models.DurationField(_("Durata"), default=timedelta(days=365))
+    changed_at = models.DateTimeField(_("Data modifica"), auto_now=True)
 
     objects = LegalReasonManager()
 
     @property
     def field_name(self):
         return f"privacy_{self.slug}"
+
+    def check_expiration(self, log_datetime: datetime) -> bool:
+        expiration = aware_timedelta_days(log_datetime, self.duration)
+        time_expired = now() > expiration
+        changed = self.changed_at > log_datetime
+        return any([time_expired, changed])
 
     def __str__(self):
         return self.flag_text
