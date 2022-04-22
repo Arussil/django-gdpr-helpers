@@ -21,7 +21,7 @@ help: ## This help.
 # Venv management commands
 #############################
 install-test: ## Install test requirements
-	pip install .[test]
+	pip install -e .[test]
 
 venv: ## Create a venv and install test requirements
 	$(shell which python3) -m venv $(VENV)
