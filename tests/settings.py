@@ -15,10 +15,6 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": os.path.join(PROJECT_ROOT, "db.sqlite3"),
-        "USER": "",
-        "PASSWORD": "",
-        "HOST": "",
-        "PORT": "",
     }
 }
 
@@ -87,6 +83,6 @@ INSTALLED_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.admin",
-    "gdpr_helpers",
     "tests",
+    "gdpr_helpers",
 )
