@@ -2,6 +2,7 @@ import pytest
 from django import forms
 
 from gdpr_helpers.models import PrivacyEvent, PrivacyLog
+from gdpr_helpers.forms import LegalReasonGroupForm
 from tests.forms import DummyForm
 
 
@@ -68,3 +69,14 @@ def test_log_are_correct(log):
     event_2 = PrivacyEvent.objects.get(privacy_log=log, legal_reason__slug="marketing")
     assert event_1.accepted is True
     assert event_2.accepted is False
+
+
+def test_legal_reason_group_form_is_valid(db):
+    form = LegalReasonGroupForm(
+        {
+            "connected_to": ["tests.forms.DummyForm"],
+            "is_active": True,
+            "is_renewable": True,
+        }
+    )
+    assert form.is_valid()

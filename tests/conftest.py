@@ -10,7 +10,10 @@ timezone_now = now()
 @pytest.fixture
 def registration_legal_reason_group(db, freezer) -> LegalReasonGroup:
     freezer.move_to(timezone_now)
-    group = LegalReasonGroup.objects.create(where="registration", is_renewable=True)
+    group = LegalReasonGroup.objects.create(
+        connected_to=["tests.forms.DummyForm", "tests.forms.DummyRenewForm, DummyChangeForm"], 
+        is_renewable=True
+    )
     LegalReason.objects.create(
         legal_group=group,
         required=True,

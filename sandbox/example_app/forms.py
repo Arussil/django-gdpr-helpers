@@ -8,7 +8,6 @@ from .models import ExampleModel
 class ExampleForm(GDPRFormMixin, forms.ModelForm):
     class Meta:
         model = ExampleModel
-        where = "contact_form"
         exclude = ()
 
     def save(self):
@@ -18,3 +17,6 @@ class ExampleForm(GDPRFormMixin, forms.ModelForm):
             cleaned_data=self.cleaned_data
         )
         return saved_object
+
+class ExampleChangeForm(GDPRFormMixin, forms.Form):
+    pass

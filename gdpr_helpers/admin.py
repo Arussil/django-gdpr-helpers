@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import LegalReason, LegalReasonGroup, PrivacyEvent, PrivacyLog
+from .forms import LegalReasonGroupForm
 
 
 class NoPermissionMixin(object):
@@ -37,6 +38,7 @@ class LegalReasonInline(admin.StackedInline):
 
 class LegalReasonGroupAdmin(admin.ModelAdmin):
     inlines = [LegalReasonInline]
+    form = LegalReasonGroupForm
 
 
 admin.site.register(LegalReason)

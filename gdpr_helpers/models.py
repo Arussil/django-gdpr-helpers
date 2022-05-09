@@ -6,7 +6,7 @@ from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 
 from .managers import LegalReasonGroupManager, LegalReasonManager, PrivacyLogManager
-from .utils import aware_timedelta_days
+from .utils import aware_timedelta_days, FormRegistry
 
 
 class PrivacyLog(models.Model):
@@ -44,6 +44,7 @@ class LegalReasonGroup(models.Model):
     where = models.CharField(_("Posizione del gruppo"), max_length=100, unique=True)
     is_active = models.BooleanField(_("Attivo"), default=True)
     is_renewable = models.BooleanField(_("Rinnovabile"), default=False)
+    connected_to = models.JSONField(_("Form collegato"), max_length=100, default=dict)
 
     objects = LegalReasonGroupManager()
 
@@ -54,7 +55,7 @@ class LegalReasonGroup(models.Model):
         return fields
 
     def __str__(self):
-        return gettext(f"For use in {self.where}")
+        return gettext(f"Connected to {self.connected_to}")
 
     class Meta:
         verbose_name = _("Gruppo ragioni legali")

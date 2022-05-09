@@ -1,6 +1,6 @@
 from django.views.generic import FormView
 
-from tests.forms import DummyForm, DummyRenewForm
+from tests.forms import DummyForm, DummyRenewForm, DummyChangeForm
 
 
 class DummyRegistrationView(FormView):
@@ -30,3 +30,7 @@ class DummyRenewConsentsView(FormView):
 
     def get_success_url(self):
         return self.request.path
+
+
+class DummyChangeConsentsView(DummyRenewConsentsView):
+    form_class = DummyChangeForm

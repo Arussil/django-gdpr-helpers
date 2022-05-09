@@ -8,7 +8,6 @@ from gdpr_helpers.models import PrivacyLog
 class DummyForm(GDPRFormMixin, forms.ModelForm):
     class Meta:
         model = get_user_model()
-        where = "registration"
         fields = (
             "username",
             "password",
@@ -21,14 +20,20 @@ class DummyForm(GDPRFormMixin, forms.ModelForm):
         )
         return user
 
-
 class DummyRenewForm(GDPRFormMixin, forms.Form):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
         super().__init__(*args, **kwargs)
 
-    class Meta:
-        where = "registration"
+    def save(self):
+        PrivacyLog.objects.create_log(
+            content_object=self.user, cleaned_data=self.cleaned_data
+        )
+
+class DummyChangeForm(GDPRFormMixin, forms.Form):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        super().__init__(*args, **kwargs)
 
     def save(self):
         PrivacyLog.objects.create_log(
